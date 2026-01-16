@@ -47,6 +47,12 @@ body {
   color: #4da3ff;
 }
 
+.nav-links a.active {
+  color: #4da3ff;
+  border-bottom: 2px solid #4da3ff;
+  padding-bottom: 3px;
+}
+
 .nav-links .search {
   cursor: pointer;
   font-size: 18px;
@@ -58,6 +64,92 @@ body {
   background: url("https://picsum.photos/1600/600") center/cover no-repeat;
   display: flex;
   align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.hero h1 {
+  font-size: 48px;
+  margin: 0;
+  z-index: 2;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+}
+
+.hero.small {
+  height: 200px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+}
+
+.hero.small h1 {
+  font-size: 36px;
+}
+
+/* CONTAINER */
+.container {
+  max-width: 1000px;
+  margin: 60px auto;
+  padding: 40px 20px;
+}
+
+.container.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.container.two-col img {
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(77, 163, 255, 0.2);
+}
+
+.container.two-col h2 {
+  font-size: 32px;
+  color: #4da3ff;
+  margin-top: 0;
+}
+
+.container.two-col p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #ccc;
+}
+
+.container.contact {
+  background: #111;
+  border-left: 4px solid #4da3ff;
+  border-radius: 4px;
+}
+
+.container.contact h2 {
+  color: #4da3ff;
+  margin-top: 0;
+  font-size: 28px;
+}
+
+.container.contact p {
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+/* BUTTON */
+.btn {
+  display: inline-block;
+  padding: 12px 30px;
+  background: #4da3ff;
+  color: black;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: bold;
+  transition: background 0.3s, transform 0.2s;
+  margin-top: 15px;
+}
+
+.btn:hover {
+  background: #3d8ff0;
+  transform: translateY(-2px);
 }
 
 .hero-text {
