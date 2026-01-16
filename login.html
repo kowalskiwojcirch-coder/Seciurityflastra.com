@@ -61,7 +61,7 @@
 </footer>
 
 <script>
-const API_URL = 'http://localhost:3000';
+let userData = JSON.parse(localStorage.getItem('appUsers')) || {};
 
 // PRZEŁĄCZANIE MIĘDZY FORMULARZAMI
 document.getElementById('toRegister').onclick = function(e) {
@@ -77,7 +77,7 @@ document.getElementById('toLogin').onclick = function(e) {
 };
 
 // REJESTRACJA
-document.getElementById('registerBtn').onclick = async function() {
+document.getElementById('registerBtn').onclick = function() {
   const username = document.getElementById('regUsername').value.trim();
   const email = document.getElementById('regEmail').value.trim();
   const pass = document.getElementById('regPass').value;
@@ -105,70 +105,48 @@ document.getElementById('registerBtn').onclick = async function() {
     return false;
   }
   
-  try {
-    const response = await fetch(`${API_URL}/api/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        username, email, password: pass, passwordConfirm: passConf
-      })
-    });
-    
-    const data = await response.json();
-    
-    if (response.ok) {
-      localStorage.setItem('loggedUser', email);
-      localStorage.setItem('userName', username);
-      
-      document.getElementById('regUsername').value = '';
-      document.getElementById('regEmail').value = '';
-      document.getElementById('regPass').value = '';
-      document.getElementById('regPassConf').value = '';
-      document.getElementById('privacyCheck').checked = false;
-      
-      showProfile({ username, email });
-    } else {
-      errDiv.innerHTML = '❌ ' + data.error;
-      errDiv.style.display = 'block';
-    }
-  } catch (err) {
-    errDiv.innerHTML = '❌ Błąd połączenia z serwerem. Upewnij się że serwer jest uruchomiony!';
+  if (userData[email]) {
+    errDiv.innerHTML = '❌ Ten email już istnieje!';
     errDiv.style.display = 'block';
+    return false;
   }
+  
+  userData[email] = { username: username, email: email, password: pass };
+  localStorage.setItem('appUsers', JSON.stringify(userData));
+  localStorage.setItem('loggedUser', email);
+  
+  // Wyczyść pola formularza
+  document.getElementById('regUsername').value = '';
+  document.getElementById('regEmail').value = '';
+  document.getElementById('regPass').value = '';
+  document.getElementById('regPassConf').value = '';
+  document.getElementById('privacyCheck').checked = false;
+  
+  showProfile(userData[email]);
 };
 
 // LOGOWANIE
-document.getElementById('loginBtn').onclick = async function() {
+document.getElementById('loginBtn').onclick = function() {
   const input = document.getElementById('loginEmail').value.trim();
   const pass = document.getElementById('loginPass').value;
   const errDiv = document.getElementById('loginError');
   
   errDiv.style.display = 'none';
   
-  try {
-    const response = await fetch(`${API_URL}/api/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ input, password: pass })
-    });
-    
-    const data = await response.json();
-    
-    if (response.ok) {
-      localStorage.setItem('loggedUser', data.user.email);
-      localStorage.setItem('userName', data.user.username);
-      localStorage.setItem('token', data.token);
-      
-      document.getElementById('loginEmail').value = '';
-      document.getElementById('loginPass').value = '';
-      
-      showProfile(data.user);
-    } else {
-      errDiv.innerHTML = '❌ ' + data.error;
-      errDiv.style.display = 'block';
+  let foundUser = null;
+  for (let key in userData) {
+    const user = userData[key];
+    if ((user.email === input || user.username === input) && user.password === pass) {
+      foundUser = user;
+      break;
     }
-  } catch (err) {
-    errDiv.innerHTML = '❌ Błąd połączenia z serwerem. Upewnij się że serwer jest uruchomiony!';
+  }
+  
+  if (foundUser) {
+    localStorage.setItem('loggedUser', foundUser.email);
+    showProfile(foundUser);
+  } else {
+    errDiv.innerHTML = '❌ Błędny email/nazwa lub hasło!';
     errDiv.style.display = 'block';
   }
 };
@@ -176,8 +154,6 @@ document.getElementById('loginBtn').onclick = async function() {
 // WYLOGOWANIE
 document.getElementById('logoutBtn').onclick = function() {
   localStorage.removeItem('loggedUser');
-  localStorage.removeItem('userName');
-  localStorage.removeItem('token');
   document.getElementById('profilePanel').style.display = 'none';
   document.getElementById('loginDiv').style.display = 'block';
   document.getElementById('registerDiv').style.display = 'none';
@@ -197,10 +173,8 @@ function showProfile(user) {
 // SPRAWDŹ CZY JUŻ ZALOGOWANY
 window.onload = function() {
   const logged = localStorage.getItem('loggedUser');
-  const userName = localStorage.getItem('userName');
-  
-  if (logged && userName) {
-    showProfile({ email: logged, username: userName });
+  if (logged && userData[logged]) {
+    showProfile(userData[logged]);
   }
 };
 </script>
