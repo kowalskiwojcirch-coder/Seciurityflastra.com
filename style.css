@@ -17,6 +17,9 @@ body {
   background: #111;
   padding: 15px 30px;
   border-bottom: 1px solid #333;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .navbar .logo {
@@ -37,6 +40,7 @@ body {
   color: white;
   text-decoration: none;
   font-size: 14px;
+  transition: color 0.3s;
 }
 
 .nav-links a:hover {
@@ -62,6 +66,16 @@ body {
   margin-left: 5%;
 }
 
+.hero-text h1 {
+  margin: 0;
+  font-size: 32px;
+}
+
+.hero-text p {
+  margin: 10px 0 0 0;
+  font-size: 16px;
+}
+
 /* ABOUT */
 .about {
   max-width: 1000px;
@@ -69,10 +83,16 @@ body {
   padding: 0 20px;
 }
 
+.about h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
 .stats {
   display: flex;
   gap: 40px;
   margin-top: 30px;
+  flex-wrap: wrap;
 }
 
 .stat {
@@ -83,10 +103,14 @@ body {
   font-size: 32px;
   color: #4da3ff;
   font-weight: bold;
+  display: block;
 }
 
 .label {
   font-size: 14px;
+  color: #ccc;
+  display: block;
+  margin-top: 5px;
 }
 
 /* GALLERY */
@@ -94,6 +118,11 @@ body {
   max-width: 1100px;
   margin: 60px auto;
   padding: 0 20px;
+}
+
+.gallery h2 {
+  font-size: 28px;
+  margin-bottom: 30px;
 }
 
 .grid {
@@ -104,40 +133,181 @@ body {
 
 .grid img {
   width: 100%;
-  height: auto;
+  height: 250px;
   border-radius: 8px;
   object-fit: cover;
+  transition: transform 0.3s;
 }
 
-/* ORDER */
-.order {
+.grid img:hover {
+  transform: scale(1.05);
+}
+
+/* LOGIN SECTION */
+.login-section {
+  max-width: 400px;
+  margin: 60px auto;
+  padding: 0 20px;
+}
+
+.login-container {
+  background: #111;
+  padding: 40px;
+  border-radius: 8px;
+  border: 1px solid #333;
+}
+
+.login-container h1 {
+  text-align: center;
+  color: #4da3ff;
+  margin-top: 0;
+}
+
+.login-container form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-container input {
+  padding: 12px;
+  margin: 10px 0;
+  background: #222;
+  border: 1px solid #444;
+  color: white;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.login-container input:focus {
+  outline: none;
+  border-color: #4da3ff;
+  background: #1a1a1a;
+}
+
+.login-container button {
+  padding: 12px;
+  margin-top: 15px;
+  background: #4da3ff;
+  color: black;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.login-container button:hover {
+  background: #3d8ff0;
+}
+
+.login-container p {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.login-container a {
+  color: #4da3ff;
+  text-decoration: none;
+}
+
+.login-container a:hover {
+  text-decoration: underline;
+}
+
+/* SECRETARY SECTION */
+.secretary-section {
   max-width: 1000px;
   margin: 60px auto;
   padding: 0 20px;
 }
 
-.note {
-  margin-top: 20px;
-  color: #ccc;
+.secretary-section h1 {
+  font-size: 32px;
+  color: #4da3ff;
 }
 
-.buttons {
-  margin-top: 30px;
-  display: flex;
-  gap: 20px;
-}
-
-button {
-  padding: 12px 20px;
+.info-box {
   background: #111;
-  color: white;
-  border: 1px solid #444;
-  cursor: pointer;
+  padding: 30px;
+  border-left: 4px solid #4da3ff;
+  border-radius: 4px;
+  margin-top: 30px;
 }
 
-button:hover {
-  background: #222;
+.info-box h2 {
+  margin-top: 0;
+  color: #4da3ff;
 }
+
+.info-box ul {
+  list-style: none;
+  padding: 0;
+}
+
+.info-box li {
+  padding: 10px 0;
+  border-bottom: 1px solid #333;
+}
+
+.info-box li:last-child {
+  border-bottom: none;
+}
+
+/* CONTACT SECTION */
+.contact-section {
+  background: #111;
+  padding: 40px;
+  border-radius: 8px;
+  border: 1px solid #333;
+  margin-top: 30px;
+  max-width: 600px;
+}
+
+.contact-section h2 {
+  color: #4da3ff;
+  margin-top: 0;
+}
+
+.contact-section form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.contact-section input,
+.contact-section textarea {
+  padding: 12px;
+  background: #222;
+  border: 1px solid #444;
+  color: white;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+}
+
+.contact-section input:focus,
+.contact-section textarea:focus {
+  outline: none;
+  border-color: #4da3ff;
+  background: #1a1a1a;
+}
+
+.contact-section button {
+  padding: 12px;
+  background: #4da3ff;
+  color: black;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.contact-section button:hover {
+  background: #3d8ff0;
+}
+
 /* FOOTER */
 footer {
   text-align: center;
@@ -146,4 +316,27 @@ footer {
   margin-top: 60px;
   color: #999;
   font-size: 14px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+  }
+
+  .stats {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
 }
