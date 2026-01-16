@@ -115,8 +115,14 @@ document.getElementById('registerBtn').onclick = function() {
   localStorage.setItem('appUsers', JSON.stringify(userData));
   localStorage.setItem('loggedUser', email);
   
+  // Wyczyść pola formularza
+  document.getElementById('regUsername').value = '';
+  document.getElementById('regEmail').value = '';
+  document.getElementById('regPass').value = '';
+  document.getElementById('regPassConf').value = '';
+  document.getElementById('privacyCheck').checked = false;
+  
   showProfile(userData[email]);
-  document.getElementById('registerDiv').reset();
 };
 
 // LOGOWANIE
