@@ -318,16 +318,22 @@ body {
 
 /* LOGIN SECTION */
 .login-section {
-  max-width: 400px;
-  margin: 60px auto;
+  max-width: 600px;
+  margin: 40px auto;
   padding: 0 20px;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .login-container {
   background: #111;
-  padding: 40px;
+  padding: 50px;
   border-radius: 8px;
   border: 1px solid #333;
+  width: 100%;
+  max-width: 500px;
 }
 
 .login-container h1 {
