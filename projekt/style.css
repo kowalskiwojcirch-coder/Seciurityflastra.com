@@ -153,6 +153,7 @@ body {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  text-align: center;
 }
 
 .login-container {
@@ -164,6 +165,7 @@ body {
   max-width: 450px;
   display: flex;
   flex-direction: column;
+  text-align: center;
   margin: 0 auto;
 }
 
@@ -355,6 +357,11 @@ footer {
 .profile-panel {
   max-width: 400px;
   margin: 60px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
   padding: 0 20px;
 }
 
