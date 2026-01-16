@@ -19,20 +19,165 @@
 </nav>
 
 <section class="login-section">
-  <div class="login-container">
+  <!-- PROFIL ZALOGOWANEGO UŻYTKOWNIKA -->
+  <div id="profilePanel" class="profile-panel" style="display: none;">
+    <div class="profile-card">
+      <div class="profile-avatar">👤</div>
+      <h2 id="profileName"></h2>
+      <p id="profileEmail"></p>
+      <button id="logoutBtn" class="logout-btn">Wyloguj się</button>
+    </div>
+  </div>
+
+  <!-- LOGOWANIE -->
+  <div id="loginDiv" class="login-container">
     <h1>Logowanie</h1>
-    <form>
-      <input type="email" placeholder="Email" required>
-      <input type="password" placeholder="Hasło" required>
-      <button type="submit">Zaloguj się</button>
-    </form>
-    <p>Nie masz konta? <a href="#">Rejestracja</a></p>
+    <input type="text" id="loginEmail" placeholder="Email lub nazwa" required>
+    <input type="password" id="loginPass" placeholder="Hasło" required>
+    <button id="loginBtn">Zaloguj się</button>
+    <p>Nie masz konta? <button id="toRegister" style="background: none; border: none; color: #4da3ff; cursor: pointer; text-decoration: underline; padding: 0;">Rejestracja</button></p>
+    <div id="loginError" class="error-message" style="display: none;"></div>
+  </div>
+
+  <!-- REJESTRACJA -->
+  <div id="registerDiv" class="login-container" style="display: none;">
+    <h1>Rejestracja</h1>
+    <input type="text" id="regUsername" placeholder="Nazwa użytkownika" required>
+    <input type="text" id="regEmail" placeholder="Email" required>
+    <input type="password" id="regPass" placeholder="Hasło" required>
+    <input type="password" id="regPassConf" placeholder="Potwierdź hasło" required>
+    <div class="checkbox-group">
+      <input type="checkbox" id="privacyCheck" required>
+      <label for="privacyCheck">Akceptuję <strong>politykę prywatności</strong> i <strong>pliki cookies</strong></label>
+    </div>
+    <button id="registerBtn">Zarejestruj się</button>
+    <p>Masz już konto? <button id="toLogin" style="background: none; border: none; color: #4da3ff; cursor: pointer; text-decoration: underline; padding: 0;">Logowanie</button></p>
+    <div id="regError" class="error-message" style="display: none;"></div>
   </div>
 </section>
 
 <footer>
   <p>&copy; 2024-2026 Security Flastra. Wszystkie prawa zastrzeżone.</p>
 </footer>
+
+<script>
+let userData = JSON.parse(localStorage.getItem('appUsers')) || {};
+
+// PRZEŁĄCZANIE MIĘDZY FORMULARZAMI
+document.getElementById('toRegister').onclick = function(e) {
+  e.preventDefault();
+  document.getElementById('loginDiv').style.display = 'none';
+  document.getElementById('registerDiv').style.display = 'block';
+};
+
+document.getElementById('toLogin').onclick = function(e) {
+  e.preventDefault();
+  document.getElementById('registerDiv').style.display = 'none';
+  document.getElementById('loginDiv').style.display = 'block';
+};
+
+// REJESTRACJA
+document.getElementById('registerBtn').onclick = function() {
+  const username = document.getElementById('regUsername').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const pass = document.getElementById('regPass').value;
+  const passConf = document.getElementById('regPassConf').value;
+  const privacyOk = document.getElementById('privacyCheck').checked;
+  const errDiv = document.getElementById('regError');
+  
+  errDiv.style.display = 'none';
+  
+  if (!privacyOk) {
+    errDiv.innerHTML = '❌ Musisz zaakceptować politykę prywatności!';
+    errDiv.style.display = 'block';
+    return false;
+  }
+  
+  if (pass !== passConf) {
+    errDiv.innerHTML = '❌ Hasła się nie zgadzają!';
+    errDiv.style.display = 'block';
+    return false;
+  }
+  
+  if (pass.length < 6) {
+    errDiv.innerHTML = '❌ Hasło musi mieć co najmniej 6 znaków!';
+    errDiv.style.display = 'block';
+    return false;
+  }
+  
+  if (userData[email]) {
+    errDiv.innerHTML = '❌ Ten email już istnieje!';
+    errDiv.style.display = 'block';
+    return false;
+  }
+  
+  userData[email] = { username: username, email: email, password: pass };
+  localStorage.setItem('appUsers', JSON.stringify(userData));
+  localStorage.setItem('loggedUser', email);
+  
+  // Wyczyść pola formularza
+  document.getElementById('regUsername').value = '';
+  document.getElementById('regEmail').value = '';
+  document.getElementById('regPass').value = '';
+  document.getElementById('regPassConf').value = '';
+  document.getElementById('privacyCheck').checked = false;
+  
+  showProfile(userData[email]);
+};
+
+// LOGOWANIE
+document.getElementById('loginBtn').onclick = function() {
+  const input = document.getElementById('loginEmail').value.trim();
+  const pass = document.getElementById('loginPass').value;
+  const errDiv = document.getElementById('loginError');
+  
+  errDiv.style.display = 'none';
+  
+  let foundUser = null;
+  for (let key in userData) {
+    const user = userData[key];
+    if ((user.email === input || user.username === input) && user.password === pass) {
+      foundUser = user;
+      break;
+    }
+  }
+  
+  if (foundUser) {
+    localStorage.setItem('loggedUser', foundUser.email);
+    showProfile(foundUser);
+  } else {
+    errDiv.innerHTML = '❌ Błędny email/nazwa lub hasło!';
+    errDiv.style.display = 'block';
+  }
+};
+
+// WYLOGOWANIE
+document.getElementById('logoutBtn').onclick = function() {
+  localStorage.removeItem('loggedUser');
+  document.getElementById('profilePanel').style.display = 'none';
+  document.getElementById('loginDiv').style.display = 'block';
+  document.getElementById('registerDiv').style.display = 'none';
+  document.getElementById('loginEmail').value = '';
+  document.getElementById('loginPass').value = '';
+};
+
+// POKAŻ PROFIL
+function showProfile(user) {
+  document.getElementById('loginDiv').style.display = 'none';
+  document.getElementById('registerDiv').style.display = 'none';
+  document.getElementById('profilePanel').style.display = 'block';
+  document.getElementById('profileName').textContent = user.username;
+  document.getElementById('profileEmail').textContent = user.email;
+}
+
+// SPRAWDŹ CZY JUŻ ZALOGOWANY
+window.onload = function() {
+  const logged = localStorage.getItem('loggedUser');
+  if (logged && userData[logged]) {
+    showProfile(userData[logged]);
+  }
+};
+</script>
 
 </body>
 </html>

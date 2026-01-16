@@ -340,3 +340,90 @@ footer {
     grid-template-columns: 1fr;
   }
 }
+
+/* PROFIL UŻYTKOWNIKA */
+.profile-panel {
+  max-width: 400px;
+  margin: 60px auto;
+  padding: 0 20px;
+}
+
+.profile-card {
+  background: linear-gradient(135deg, #1a1a1a 0%, #222 100%);
+  padding: 40px;
+  border-radius: 12px;
+  border: 2px solid #4da3ff;
+  text-align: center;
+  box-shadow: 0 0 30px rgba(77, 163, 255, 0.3);
+}
+
+.profile-avatar {
+  font-size: 64px;
+  margin-bottom: 20px;
+}
+
+.profile-card h2 {
+  color: #4da3ff;
+  margin: 15px 0;
+  font-size: 24px;
+}
+
+.profile-card p {
+  color: #aaa;
+  margin: 10px 0 30px 0;
+  font-size: 14px;
+}
+
+.logout-btn {
+  padding: 12px 30px;
+  background: #ff4444;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.logout-btn:hover {
+  background: #cc0000;
+}
+
+/* CHECKBOX DLA POLITYKI PRYWATNOŚCI */
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  margin: 15px 0;
+  gap: 10px;
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  margin: 0;
+  accent-color: #4da3ff;
+}
+
+.checkbox-group label {
+  font-size: 13px;
+  color: #ddd;
+  cursor: pointer;
+  margin: 0;
+}
+
+.checkbox-group label strong {
+  color: #4da3ff;
+}
+
+/* KOMUNIKATY BŁĘDU */
+.error-message {
+  background: #ff4444;
+  color: white;
+  padding: 12px;
+  border-radius: 4px;
+  margin-top: 15px;
+  text-align: center;
+  font-size: 14px;
+  border-left: 4px solid #cc0000;
+}
