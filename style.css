@@ -9,6 +9,45 @@ body {
   color: white;
 }
 
+/* NAVBAR */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #111;
+  padding: 15px 30px;
+  border-bottom: 1px solid #333;
+}
+
+.navbar .logo {
+  font-weight: bold;
+  font-size: 18px;
+  color: #4da3ff;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 30px;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.nav-links a:hover {
+  color: #4da3ff;
+}
+
+.nav-links .search {
+  cursor: pointer;
+  font-size: 18px;
+}
+
 /* HERO */
 .hero {
   height: 300px;
