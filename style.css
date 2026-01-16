@@ -318,13 +318,14 @@ body {
 
 /* LOGIN SECTION */
 .login-section {
-  max-width: 600px;
-  margin: 40px auto;
-  padding: 0 20px;
-  min-height: 400px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 40px 20px;
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
 }
 
 .login-container {
@@ -333,7 +334,9 @@ body {
   border-radius: 8px;
   border: 1px solid #333;
   width: 100%;
-  max-width: 500px;
+  max-width: 450px;
+  display: flex;
+  flex-direction: column;
 }
 
 .login-container h1 {
