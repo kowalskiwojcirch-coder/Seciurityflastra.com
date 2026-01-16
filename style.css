@@ -188,26 +188,48 @@ body {
   flex-wrap: wrap;
 }
 
-.buttons button {
+.btn {
+  display: inline-block;
   padding: 14px 30px;
-  background: #4da3ff;
-  color: black;
-  border: none;
+  text-decoration: none;
   border-radius: 6px;
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
   transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+  text-align: center;
+  border: none;
+}
+
+.buttons .btn {
+  padding: 14px 30px;
+}
+
+.btn-primary {
+  background: #4da3ff;
+  color: black;
   box-shadow: 0 4px 15px rgba(77, 163, 255, 0.3);
 }
 
-.buttons button:hover {
+.btn-primary:hover {
   background: #3d8ff0;
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(77, 163, 255, 0.5);
 }
 
-.buttons button:active {
+.btn-secondary {
+  background: #ff9800;
+  color: black;
+  box-shadow: 0 4px 15px rgba(255, 152, 0, 0.3);
+}
+
+.btn-secondary:hover {
+  background: #fb8c00;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 152, 0, 0.5);
+}
+
+.btn:active {
   transform: translateY(0);
 }
 
