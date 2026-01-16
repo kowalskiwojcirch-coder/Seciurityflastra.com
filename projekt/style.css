@@ -254,6 +254,60 @@ body {
   border-bottom: none;
 }
 
+/* CONTACT SECTION */
+.contact-section {
+  background: #111;
+  padding: 40px;
+  border-radius: 8px;
+  border: 1px solid #333;
+  margin-top: 30px;
+  max-width: 600px;
+}
+
+.contact-section h2 {
+  color: #4da3ff;
+  margin-top: 0;
+}
+
+.contact-section form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.contact-section input,
+.contact-section textarea {
+  padding: 12px;
+  background: #222;
+  border: 1px solid #444;
+  color: white;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+}
+
+.contact-section input:focus,
+.contact-section textarea:focus {
+  outline: none;
+  border-color: #4da3ff;
+  background: #1a1a1a;
+}
+
+.contact-section button {
+  padding: 12px;
+  background: #4da3ff;
+  color: black;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.contact-section button:hover {
+  background: #3d8ff0;
+}
+
 /* FOOTER */
 footer {
   text-align: center;
