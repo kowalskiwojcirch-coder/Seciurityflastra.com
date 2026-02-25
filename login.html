@@ -10,7 +10,7 @@
         button { padding: 8px 12px; margin-top: 10px; cursor: pointer; }
         .profile-avatar { font-size: 60px; margin-bottom: 10px; display: block; }
         .profile-img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; display: block; margin: 0 auto 10px; }
-        .error-message { margin-top: 5px; font-weight: bold; }
+        .error-message { margin-top: 5px; font-weight: bold; color: white; }
     </style>
 </head>
 <body>
@@ -84,12 +84,12 @@
     <script>
         let userData = JSON.parse(localStorage.getItem('appUsers')) || {};
 
-        // PRZEŁĄCZANIE MIĘDZY FORMULARZAMI
+        // PRZEŁĄCZANIE FORMULARZY
         document.getElementById('toRegister').onclick = e => { e.preventDefault(); loginDiv.style.display='none'; registerDiv.style.display='block'; };
         document.getElementById('toLogin').onclick = e => { e.preventDefault(); registerDiv.style.display='none'; loginDiv.style.display='block'; };
 
         // REJESTRACJA
-        document.getElementById('registerBtn').onclick = function() {
+        registerBtn.onclick = function() {
             const username = regUsername.value.trim();
             const email = regEmail.value.trim();
             const pass = regPass.value;
@@ -112,7 +112,7 @@
         };
 
         // LOGOWANIE
-        document.getElementById('loginBtn').onclick = function() {
+        loginBtn.onclick = function() {
             const input = loginEmail.value.trim();
             const pass = loginPass.value;
             const errDiv = loginError; errDiv.style.display='block'; errDiv.style.color='white'; errDiv.textContent='';
