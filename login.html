@@ -5,34 +5,38 @@
     <title>Login | Security Flastra</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        .login-container { max-width: 400px; margin: 20px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
-        .profile-card { text-align: center; padding: 20px; border: 1px solid #ccc; border-radius: 8px; max-width: 400px; margin: 20px auto; }
-        .error-message { color: red; margin-top: 10px; }
-        input { width: 100%; padding: 8px; margin: 5px 0; }
+        body { font-family: Arial, sans-serif; background: #f5f5f5; margin: 0; padding: 0; }
+        .navbar { background: #333; color: #fff; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .navbar a { color: #fff; text-decoration: none; margin-right: 15px; }
+        .login-container, .profile-card { background: #fff; max-width: 400px; margin: 20px auto; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        input { width: 100%; padding: 8px; margin: 5px 0; box-sizing: border-box; }
         button { padding: 8px 12px; margin-top: 10px; cursor: pointer; }
+        .error-message { color: red; font-weight: bold; margin-top: 5px; }
+        .profile-avatar { font-size: 60px; margin-bottom: 10px; display: block; }
+        .profile-img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; display: block; margin: 0 auto 10px; }
     </style>
 </head>
 <body>
     <!-- NAVBAR -->
     <nav class="navbar">
         <div class="logo">Securityflastra.com</div>
-        <ul class="nav-links">
-            <li><a href="index.html">Home Page</a></li>
-            <li><a href="secretary.html">Secretary</a></li>
-            <li><a href="login.html">Login</a></li>
-            <li class="search">🔍</li>
-        </ul>
+        <div>
+            <a href="index.html">Home Page</a>
+            <a href="secretary.html">Secretary</a>
+            <a href="login.html">Login</a>
+        </div>
     </nav>
 
     <section class="login-section">
         <!-- PROFIL ZALOGOWANEGO UŻYTKOWNIKA -->
         <div id="profilePanel" class="profile-panel" style="display: none;">
             <div class="profile-card">
-                <div class="profile-avatar">👤</div>
+                <img id="profileAvatar" class="profile-img" src="" alt="Avatar" style="display:none;">
+                <div id="profileEmoji" class="profile-avatar">👤</div>
                 <h2 id="profileName"></h2>
                 <p id="profileEmail"></p>
-                <button id="logoutBtn" class="logout-btn">Wyloguj się</button>
-                <!-- przycisk Ustawienia i info beta dodawane dynamicznie w JS -->
+                <button id="logoutBtn">Wyloguj się</button>
+                <!-- przycisk Ustawienia dodawany JS -->
             </div>
         </div>
 
@@ -44,9 +48,7 @@
             <button id="loginBtn">Zaloguj się</button>
             <p>
                 Nie masz konta? 
-                <button id="toRegister" style="background: none; border: none; color: #4da3ff; cursor: pointer; text-decoration: underline; padding: 0;">
-                    Rejestracja
-                </button>
+                <button id="toRegister" style="background:none;border:none;color:#4da3ff;text-decoration:underline;cursor:pointer;padding:0;">Rejestracja</button>
             </p>
             <div id="loginError" class="error-message" style="display: none;"></div>
         </div>
@@ -60,35 +62,28 @@
             <input type="password" id="regPassConf" placeholder="Potwierdź hasło" required>
             <div class="checkbox-group">
                 <input type="checkbox" id="privacyCheck" required>
-                <label for="privacyCheck">
-                    Akceptuję <strong>politykę prywatności</strong> i <strong>pliki cookies</strong>
-                </label>
+                <label for="privacyCheck">Akceptuję <strong>politykę prywatności</strong> i <strong>pliki cookies</strong></label>
             </div>
             <button id="registerBtn">Zarejestruj się</button>
             <p>
                 Masz już konto? 
-                <button id="toLogin" style="background: none; border: none; color: #4da3ff; cursor: pointer; text-decoration: underline; padding: 0;">
-                    Logowanie
-                </button>
+                <button id="toLogin" style="background:none;border:none;color:#4da3ff;text-decoration:underline;cursor:pointer;padding:0;">Logowanie</button>
             </p>
             <div id="regError" class="error-message" style="display: none;"></div>
         </div>
 
-        <!-- USTAWIENIA NA TEJ SAMEJ STRONIE -->
+        <!-- USTAWIENIA -->
         <div id="settingsDiv" class="login-container" style="display: none;">
             <h1>Ustawienia konta (Beta 1.2)</h1>
-            <label>Awatar (emoji):</label>
-            <input type="text" id="avatarInput" placeholder="Np. 👤">
-            
+            <label>Awatar (URL zdjęcia):</label>
+            <input type="text" id="avatarInput" placeholder="Np. https://example.com/avatar.jpg">
             <label>Nazwa użytkownika:</label>
             <input type="text" id="nameInput" placeholder="Nowa nazwa">
-
             <label>Hasło:</label>
             <input type="password" id="passInput" placeholder="Nowe hasło">
-
             <button id="saveSettings">Zapisz zmiany</button>
             <button id="backProfile" style="margin-top:5px;">Powrót do profilu</button>
-            <div id="settingsMsg" style="color: red; margin-top: 10px;"></div>
+            <div id="settingsMsg" class="error-message"></div>
         </div>
     </section>
 
@@ -99,161 +94,112 @@
     <script>
         let userData = JSON.parse(localStorage.getItem('appUsers')) || {};
 
-        // PRZEŁĄCZANIE MIĘDZY FORMULARZAMI
-        document.getElementById('toRegister').onclick = function(e) {
+        // PRZEŁĄCZANIE FORMULARZY
+        document.getElementById('toRegister').onclick = e => {
             e.preventDefault();
-            document.getElementById('loginDiv').style.display = 'none';
-            document.getElementById('registerDiv').style.display = 'block';
+            loginDiv.style.display='none'; registerDiv.style.display='block';
         };
-        document.getElementById('toLogin').onclick = function(e) {
+        document.getElementById('toLogin').onclick = e => {
             e.preventDefault();
-            document.getElementById('registerDiv').style.display = 'none';
-            document.getElementById('loginDiv').style.display = 'block';
+            registerDiv.style.display='none'; loginDiv.style.display='block';
         };
 
         // REJESTRACJA
         document.getElementById('registerBtn').onclick = function() {
-            const username = document.getElementById('regUsername').value.trim();
-            const email = document.getElementById('regEmail').value.trim();
-            const pass = document.getElementById('regPass').value;
-            const passConf = document.getElementById('regPassConf').value;
-            const privacyOk = document.getElementById('privacyCheck').checked;
-            const errDiv = document.getElementById('regError');
-            errDiv.style.display = 'none';
+            const username=document.getElementById('regUsername').value.trim();
+            const email=document.getElementById('regEmail').value.trim();
+            const pass=document.getElementById('regPass').value;
+            const passConf=document.getElementById('regPassConf').value;
+            const privacyOk=document.getElementById('privacyCheck').checked;
+            const errDiv=document.getElementById('regError');
+            errDiv.style.display='none';
 
-            if (!privacyOk) { errDiv.innerHTML = '❌ Musisz zaakceptować politykę prywatności!'; errDiv.style.display = 'block'; return false; }
-            if (pass !== passConf) { errDiv.innerHTML = '❌ Hasła się nie zgadzają!'; errDiv.style.display = 'block'; return false; }
-            if (pass.length < 6) { errDiv.innerHTML = '❌ Hasło musi mieć co najmniej 6 znaków!'; errDiv.style.display = 'block'; return false; }
-            if (userData[email]) { errDiv.innerHTML = '❌ Ten email już istnieje!'; errDiv.style.display = 'block'; return false; }
+            if(!privacyOk){errDiv.textContent='❌ Musisz zaakceptować politykę prywatności!';errDiv.style.display='block'; return;}
+            if(pass!==passConf){errDiv.textContent='❌ Hasła się nie zgadzają!';errDiv.style.display='block'; return;}
+            if(pass.length<6){errDiv.textContent='❌ Hasło musi mieć co najmniej 6 znaków!';errDiv.style.display='block'; return;}
+            if(userData[email]){errDiv.textContent='❌ Ten email już istnieje!';errDiv.style.display='block'; return;}
 
-            userData[email] = { username: username, email: email, password: pass };
-            localStorage.setItem('appUsers', JSON.stringify(userData));
-            localStorage.setItem('loggedUser', email);
-
-            document.getElementById('regUsername').value = '';
-            document.getElementById('regEmail').value = '';
-            document.getElementById('regPass').value = '';
-            document.getElementById('regPassConf').value = '';
-            document.getElementById('privacyCheck').checked = false;
+            userData[email]={username,email,password:pass,avatar:''};
+            localStorage.setItem('appUsers',JSON.stringify(userData));
+            localStorage.setItem('loggedUser',email);
+            document.getElementById('regUsername').value=''; document.getElementById('regEmail').value='';
+            document.getElementById('regPass').value=''; document.getElementById('regPassConf').value=''; document.getElementById('privacyCheck').checked=false;
 
             showProfile(userData[email]);
         };
 
         // LOGOWANIE
         document.getElementById('loginBtn').onclick = function() {
-            const input = document.getElementById('loginEmail').value.trim();
-            const pass = document.getElementById('loginPass').value;
-            const errDiv = document.getElementById('loginError');
-            errDiv.style.display = 'none';
-            let foundUser = null;
-
-            for (let key in userData) {
-                const user = userData[key];
-                if ((user.email === input || user.username === input) && user.password === pass) {
-                    foundUser = user;
-                    break;
-                }
+            const input=document.getElementById('loginEmail').value.trim();
+            const pass=document.getElementById('loginPass').value;
+            const errDiv=document.getElementById('loginError'); errDiv.style.display='none';
+            let found=null;
+            for(let key in userData){
+                const u=userData[key];
+                if((u.email===input||u.username===input)&&u.password===pass){found=u;break;}
             }
-
-            if (foundUser) {
-                localStorage.setItem('loggedUser', foundUser.email);
-                showProfile(foundUser);
-            } else {
-                errDiv.innerHTML = '❌ Błędny email/nazwa lub hasło!';
-                errDiv.style.display = 'block';
-            }
+            if(found){localStorage.setItem('loggedUser',found.email); showProfile(found);}
+            else{errDiv.textContent='❌ Błędny email/nazwa lub hasło!'; errDiv.style.display='block';}
         };
 
         // WYLOGOWANIE
-        document.getElementById('logoutBtn').onclick = function() {
+        document.getElementById('logoutBtn').onclick=function(){
             localStorage.removeItem('loggedUser');
-            document.getElementById('profilePanel').style.display = 'none';
-            document.getElementById('loginDiv').style.display = 'block';
-            document.getElementById('registerDiv').style.display = 'none';
-            document.getElementById('loginEmail').value = '';
-            document.getElementById('loginPass').value = '';
+            profilePanel.style.display='none';
+            loginDiv.style.display='block';
+            registerDiv.style.display='none';
+            loginEmail.value=''; loginPass.value='';
         };
 
         // POKAŻ PROFIL + USTAWIENIA
-        function showProfile(user) {
-            document.getElementById('loginDiv').style.display = 'none';
-            document.getElementById('registerDiv').style.display = 'none';
-            document.getElementById('settingsDiv').style.display = 'none';
-            document.getElementById('profilePanel').style.display = 'block';
-            document.getElementById('profileName').textContent = user.username;
-            document.getElementById('profileEmail').textContent = user.email;
+        function showProfile(user){
+            loginDiv.style.display='none'; registerDiv.style.display='none'; settingsDiv.style.display='none'; profilePanel.style.display='block';
+            profileName.textContent=user.username; profileEmail.textContent=user.email;
 
-            // Dodaj przycisk Ustawienia tylko raz
-            if (!document.getElementById('settingsBtn')) {
-                const profileCard = document.querySelector('.profile-card');
+            if(user.avatar){
+                profileAvatar.src=user.avatar; profileAvatar.style.display='block'; profileEmoji.style.display='none';
+            }else{
+                profileAvatar.style.display='none'; profileEmoji.style.display='block';
+            }
 
-                const settingsBtn = document.createElement('button');
-                settingsBtn.id = 'settingsBtn';
-                settingsBtn.textContent = 'Ustawienia';
-                settingsBtn.style.marginTop = '10px';
-                settingsBtn.style.background = '#4da3ff';
-                settingsBtn.style.color = '#fff';
-                settingsBtn.style.border = 'none';
-                settingsBtn.style.padding = '5px 10px';
-                settingsBtn.style.cursor = 'pointer';
-                settingsBtn.onclick = function() {
-                    document.getElementById('profilePanel').style.display = 'none';
-                    document.getElementById('settingsDiv').style.display = 'block';
-                    document.getElementById('avatarInput').value = user.avatar || '👤';
-                    document.getElementById('nameInput').value = user.username;
-                    document.getElementById('passInput').value = '';
-                    document.getElementById('settingsMsg').textContent = '';
+            if(!document.getElementById('settingsBtn')){
+                const btn=document.createElement('button'); btn.id='settingsBtn'; btn.textContent='Ustawienia';
+                btn.style.marginTop='10px'; btn.style.background='#4da3ff'; btn.style.color='#fff'; btn.style.border='none';
+                btn.style.padding='5px 10px'; btn.style.cursor='pointer';
+                btn.onclick=function(){
+                    profilePanel.style.display='none'; settingsDiv.style.display='block';
+                    avatarInput.value=user.avatar||''; nameInput.value=user.username; passInput.value=''; settingsMsg.textContent='';
                 };
-                profileCard.appendChild(settingsBtn);
+                profileCard.appendChild(btn);
 
-                const betaInfo = document.createElement('p');
-                betaInfo.textContent = 'Ta funkcja jest w becie 1.2';
-                betaInfo.style.fontSize = '12px';
-                betaInfo.style.color = '#888';
-                betaInfo.style.marginTop = '5px';
-                profileCard.appendChild(betaInfo);
+                const beta=document.createElement('p'); beta.textContent='Ta funkcja jest w becie 1.2';
+                beta.style.fontSize='12px'; beta.style.color='#888'; beta.style.marginTop='5px';
+                profileCard.appendChild(beta);
             }
         }
 
-        // ZAPISZ ZMIANY USTAWIEŃ
-        document.getElementById('saveSettings').onclick = function() {
-            const logged = localStorage.getItem('loggedUser');
-            if (!logged || !userData[logged]) return;
-
-            const user = userData[logged];
-            const avatar = document.getElementById('avatarInput').value.trim();
-            const name = document.getElementById('nameInput').value.trim();
-            const pass = document.getElementById('passInput').value;
-            const msgDiv = document.getElementById('settingsMsg');
-            msgDiv.style.color = 'red';
-            msgDiv.textContent = '';
-
-            if (name.length < 1) { msgDiv.textContent = '❌ Nazwa użytkownika nie może być pusta!'; return; }
-            if (pass && pass.length < 6) { msgDiv.textContent = '❌ Hasło musi mieć co najmniej 6 znaków!'; return; }
-
-            user.username = name;
-            if (pass) user.password = pass;
-            user.avatar = avatar;
-
-            userData[logged] = user;
-            localStorage.setItem('appUsers', JSON.stringify(userData));
-
-            msgDiv.style.color = 'green';
-            msgDiv.textContent = '✅ Zmiany zapisane!';
+        // ZAPISZ ZMIANY
+        saveSettings.onclick=function(){
+            const logged=localStorage.getItem('loggedUser'); if(!logged||!userData[logged]) return;
+            const user=userData[logged];
+            const avatar=avatarInput.value.trim(); const name=nameInput.value.trim(); const pass=passInput.value; const msg=settingsMsg;
+            msg.style.color='red'; msg.textContent='';
+            if(name.length<1){msg.textContent='❌ Nazwa użytkownika nie może być pusta!'; return;}
+            if(pass&&pass.length<6){msg.textContent='❌ Hasło musi mieć co najmniej 6 znaków!'; return;}
+            user.username=name; if(pass) user.password=pass; user.avatar=avatar;
+            userData[logged]=user; localStorage.setItem('appUsers',JSON.stringify(userData));
+            msg.style.color='green'; msg.textContent='✅ Zmiany zapisane!';
         };
 
         // POWRÓT DO PROFILU
-        document.getElementById('backProfile').onclick = function() {
-            const logged = localStorage.getItem('loggedUser');
-            if (logged && userData[logged]) showProfile(userData[logged]);
+        backProfile.onclick=function(){
+            const logged=localStorage.getItem('loggedUser'); if(logged&&userData[logged]) showProfile(userData[logged]);
         };
 
-        // SPRAWDŹ CZY JUŻ ZALOGOWANY
-        window.onload = function() {
-            const logged = localStorage.getItem('loggedUser');
-            if (logged && userData[logged]) {
-                showProfile(userData[logged]);
-            }
+        // SPRAWDŹ ZALOGOWANIE
+        window.onload=function(){
+            const logged=localStorage.getItem('loggedUser');
+            if(logged&&userData[logged]) showProfile(userData[logged]);
         };
     </script>
 </body>
