@@ -3,10 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <title>Login | Security Flastra</title>
+<link rel="stylesheet" href="style.css">
 <style>
-body { font-family: Arial, sans-serif; background:#f5f5f5; margin:0; padding:0; }
-.navbar { background:#333; color:#fff; padding:10px 20px; display:flex; justify-content:space-between; align-items:center; }
-.navbar a { color:#fff; text-decoration:none; margin-right:15px; }
+/* Minimalne style dla poprawnego wyświetlania formularzy */
 .login-container, .profile-card { max-width:400px; margin:20px auto; padding:20px; border-radius:8px; border:1px solid #ccc; background:#fff; }
 input { width:100%; padding:8px; margin:5px 0; }
 button { padding:8px 12px; margin-top:10px; cursor:pointer; }
@@ -17,26 +16,32 @@ button { padding:8px 12px; margin-top:10px; cursor:pointer; }
 </head>
 <body>
 
+<!-- NAVBAR -->
 <nav class="navbar">
 <div class="logo">Securityflastra.com</div>
 <ul class="nav-links">
 <li><a href="index.html">Home Page</a></li>
 <li><a href="secretary.html">Secretary</a></li>
 <li><a href="login.html">Login</a></li>
+<li class="search">🔍</li>
 </ul>
 </nav>
 
 <section class="login-section">
 
-<!-- PROFIL -->
+<!-- PROFIL ZALOGOWANEGO UŻYTKOWNIKA -->
 <div id="profilePanel" class="profile-card" style="display:none;">
-<img id="profileAvatar" class="profile-img" src="" alt="Avatar" style="display:none;">
-<div id="profileEmoji" class="profile-avatar">👤</div>
-<h2 id="profileName"></h2>
-<p id="profileEmail"></p>
-<button id="settingsBtn">Ustawienia</button>
-<p style="font-size:12px;color:#888;">Ta funkcja jest w becie 1.2</p>
-<button id="logoutBtn">Wyloguj się</button>
+    <div id="profileCardInner">
+        <div id="profileAvatarContainer">
+            <div class="profile-avatar" id="profileEmoji">👤</div>
+            <img id="profileAvatar" class="profile-img" src="" style="display:none;">
+        </div>
+        <h2 id="profileName"></h2>
+        <p id="profileEmail"></p>
+        <button id="settingsBtn">Ustawienia</button>
+        <p style="font-size:12px;color:#888;">Ta funkcja jest w becie 1.2</p>
+        <button id="logoutBtn" class="logout-btn">Wyloguj się</button>
+    </div>
 </div>
 
 <!-- LOGOWANIE -->
@@ -67,15 +72,12 @@ button { padding:8px 12px; margin-top:10px; cursor:pointer; }
 
 <!-- USTAWIENIA -->
 <div id="settingsDiv" class="login-container" style="display:none;">
-<h1>Ustawienia konta (Beta 1.2)</h1>
-<label>Awatar (URL zdjęcia):</label>
-<input type="text" id="avatarInput" placeholder="Np. https://example.com/avatar.jpg">
-<label>Nazwa użytkownika:</label>
+<h1>Ustawienia konta</h1>
+<input type="text" id="avatarInput" placeholder="URL awatara">
 <input type="text" id="nameInput" placeholder="Nowa nazwa">
-<label>Hasło:</label>
 <input type="password" id="passInput" placeholder="Nowe hasło">
 <button id="saveSettings">Zapisz zmiany</button>
-<button id="backProfile" style="margin-top:5px;">Powrót do profilu</button>
+<button id="backProfile">Powrót do profilu</button>
 <div id="settingsMsg" class="error-message" style="display:block;"></div>
 </div>
 
@@ -86,6 +88,7 @@ button { padding:8px 12px; margin-top:10px; cursor:pointer; }
 </footer>
 
 <script>
+// Dane użytkowników
 let userData = JSON.parse(localStorage.getItem('appUsers')) || {};
 
 // PRZEŁĄCZANIE FORMULARZY
@@ -94,9 +97,13 @@ toLogin.onclick = e => { e.preventDefault(); registerDiv.style.display='none'; l
 
 // REJESTRACJA
 registerBtn.onclick = function() {
-const username=regUsername.value.trim(); const email=regEmail.value.trim();
-const pass=regPass.value; const passConf=regPassConf.value; const privacyOk=privacyCheck.checked;
-const errDiv=regError; errDiv.style.display='block'; errDiv.style.color='white'; errDiv.textContent='';
+const username = regUsername.value.trim(); 
+const email = regEmail.value.trim();
+const pass = regPass.value; 
+const passConf = regPassConf.value; 
+const privacyOk = privacyCheck.checked;
+const errDiv = regError; 
+errDiv.style.display='block'; errDiv.style.color='white'; errDiv.textContent='';
 if(!privacyOk){ errDiv.textContent='❌ Musisz zaakceptować politykę prywatności!'; return;}
 if(pass!==passConf){ errDiv.textContent='❌ Hasła się nie zgadzają!'; return;}
 if(pass.length<6){ errDiv.textContent='❌ Hasło musi mieć co najmniej 6 znaków!'; return;}
@@ -110,46 +117,78 @@ showProfile(userData[email]);
 
 // LOGOWANIE
 loginBtn.onclick = function() {
-const input=loginEmail.value.trim(); const pass=loginPass.value; const errDiv=loginError;
+const input = loginEmail.value.trim(); 
+const pass = loginPass.value; 
+const errDiv = loginError;
 errDiv.style.display='block'; errDiv.style.color='white'; errDiv.textContent='';
-let found=null; for(let key in userData){ const u=userData[key]; if((u.email===input||u.username===input)&&u.password===pass){found=u; break;} }
-if(found){ localStorage.setItem('loggedUser',found.email); showProfile(found); } else { errDiv.textContent='❌ Błędny email/nazwa lub hasło!'; }
+let found=null; 
+for(let key in userData){ 
+    const u = userData[key]; 
+    if((u.email===input||u.username===input)&&u.password===pass){ found=u; break; } 
+}
+if(found){ localStorage.setItem('loggedUser',found.email); showProfile(found); } 
+else { errDiv.textContent='❌ Błędny email/nazwa lub hasło!'; }
 };
 
 // WYLOGOWANIE
-logoutBtn.onclick=function(){ localStorage.removeItem('loggedUser'); profilePanel.style.display='none'; loginDiv.style.display='block'; registerDiv.style.display='none'; loginEmail.value=''; loginPass.value=''; };
+logoutBtn.onclick = function() { 
+localStorage.removeItem('loggedUser'); 
+profilePanel.style.display='none'; 
+loginDiv.style.display='block'; 
+registerDiv.style.display='none'; 
+loginEmail.value=''; loginPass.value=''; 
+};
 
 // POKAŻ PROFIL
 function showProfile(user){
 loginDiv.style.display='none'; registerDiv.style.display='none'; settingsDiv.style.display='none'; profilePanel.style.display='block';
-profileName.textContent=user.username; profileEmail.textContent=user.email;
-if(user.avatar){ profileAvatar.src=user.avatar; profileAvatar.style.display='block'; profileEmoji.style.display='none'; }
+profileName.textContent = user.username; profileEmail.textContent = user.email;
+if(user.avatar){ profileAvatar.src=user.avatar; profileAvatar.style.display='block'; profileEmoji.style.display='none'; } 
 else{ profileAvatar.style.display='none'; profileEmoji.style.display='block'; }
 }
 
-// USTAWIENIA
+// OTWÓRZ USTAWIENIA
 settingsBtn.onclick = function(){
-const logged=localStorage.getItem('loggedUser'); if(!logged||!userData[logged]) return;
-const user=userData[logged]; profilePanel.style.display='none'; settingsDiv.style.display='block';
-avatarInput.value=user.avatar||''; nameInput.value=user.username; passInput.value=''; settingsMsg.textContent='';
+const logged = localStorage.getItem('loggedUser'); 
+if(!logged||!userData[logged]) return;
+const user = userData[logged];
+profilePanel.style.display='none';
+settingsDiv.style.display='block';
+avatarInput.value = user.avatar || '';
+nameInput.value = user.username;
+passInput.value = '';
+settingsMsg.textContent='';
 };
 
-saveSettings.onclick=function(){
-const logged=localStorage.getItem('loggedUser'); if(!logged||!userData[logged]) return;
-const user=userData[logged]; user.avatar=avatarInput.value.trim(); user.username=nameInput.value.trim();
-const passVal=passInput.value; const msg=settingsMsg; msg.style.display='block'; msg.style.color='white'; msg.textContent='';
+// ZAPISZ ZMIANY USTAWIEŃ
+saveSettings.onclick = function(){
+const logged = localStorage.getItem('loggedUser'); 
+if(!logged||!userData[logged]) return;
+const user = userData[logged];
+user.avatar = avatarInput.value.trim();
+user.username = nameInput.value.trim();
+const newPass = passInput.value;
+const msg = settingsMsg;
+msg.style.display='block'; msg.style.color='white'; msg.textContent='';
 if(user.username.length<1){ msg.textContent='❌ Nazwa użytkownika nie może być pusta!'; return; }
-if(passVal && passVal.length<6){ msg.textContent='❌ Hasło musi mieć co najmniej 6 znaków!'; return; }
-if(passVal) user.password=passVal;
-userData[logged]=user; localStorage.setItem('appUsers',JSON.stringify(userData));
+if(newPass && newPass.length<6){ msg.textContent='❌ Hasło musi mieć co najmniej 6 znaków!'; return; }
+if(newPass) user.password = newPass;
+userData[logged] = user;
+localStorage.setItem('appUsers', JSON.stringify(userData));
 msg.textContent='✅ Zmiany zapisane!';
 };
 
-backProfile.onclick=function(){ const logged=localStorage.getItem('loggedUser'); if(logged&&userData[logged]) showProfile(userData[logged]); };
+// POWRÓT DO PROFILU
+backProfile.onclick = function(){
+const logged = localStorage.getItem('loggedUser'); 
+if(logged && userData[logged]) showProfile(userData[logged]);
+};
 
 // SPRAWDŹ ZALOGOWANIE
-window.onload=function(){ const logged=localStorage.getItem('loggedUser'); if(logged&&userData[logged]) showProfile(userData[logged]); };
+window.onload = function(){ 
+const logged = localStorage.getItem('loggedUser'); 
+if(logged && userData[logged]) showProfile(userData[logged]);
+};
 </script>
-
 </body>
 </html>
