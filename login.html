@@ -5,18 +5,20 @@
 <title>Login | Security Flastra</title>
 <link rel="stylesheet" href="style.css">
 <style>
-/* Minimalne style dla poprawnego wyświetlania formularzy */
-.login-container, .profile-card { max-width:400px; margin:20px auto; padding:20px; border-radius:8px; border:1px solid #ccc; background:#fff; }
-input { width:100%; padding:8px; margin:5px 0; }
-button { padding:8px 12px; margin-top:10px; cursor:pointer; }
-.profile-avatar { font-size:60px; margin-bottom:10px; display:block; text-align:center; }
-.profile-img { width:80px; height:80px; border-radius:50%; object-fit:cover; display:block; margin:0 auto 10px; }
-.error-message { margin-top:5px; font-weight:bold; color:white; }
+/* Białe obramowanie dla komunikatów błędów i czarne tło */
+.error-message {
+    background-color: black; 
+    border: 1px solid white; 
+    padding: 5px; 
+    margin-top: 5px; 
+    font-weight: bold; 
+    color: white; 
+    border-radius: 4px;
+}
 </style>
 </head>
 <body>
 
-<!-- NAVBAR -->
 <nav class="navbar">
 <div class="logo">Securityflastra.com</div>
 <ul class="nav-links">
@@ -30,8 +32,8 @@ button { padding:8px 12px; margin-top:10px; cursor:pointer; }
 <section class="login-section">
 
 <!-- PROFIL ZALOGOWANEGO UŻYTKOWNIKA -->
-<div id="profilePanel" class="profile-card" style="display:none;">
-    <div id="profileCardInner">
+<div id="profilePanel" class="profile-panel" style="display:none;">
+    <div class="profile-card">
         <div id="profileAvatarContainer">
             <div class="profile-avatar" id="profileEmoji">👤</div>
             <img id="profileAvatar" class="profile-img" src="" style="display:none;">
@@ -103,7 +105,7 @@ const pass = regPass.value;
 const passConf = regPassConf.value; 
 const privacyOk = privacyCheck.checked;
 const errDiv = regError; 
-errDiv.style.display='block'; errDiv.style.color='white'; errDiv.textContent='';
+errDiv.style.display='block'; errDiv.textContent='';
 if(!privacyOk){ errDiv.textContent='❌ Musisz zaakceptować politykę prywatności!'; return;}
 if(pass!==passConf){ errDiv.textContent='❌ Hasła się nie zgadzają!'; return;}
 if(pass.length<6){ errDiv.textContent='❌ Hasło musi mieć co najmniej 6 znaków!'; return;}
@@ -120,7 +122,7 @@ loginBtn.onclick = function() {
 const input = loginEmail.value.trim(); 
 const pass = loginPass.value; 
 const errDiv = loginError;
-errDiv.style.display='block'; errDiv.style.color='white'; errDiv.textContent='';
+errDiv.style.display='block'; errDiv.textContent='';
 let found=null; 
 for(let key in userData){ 
     const u = userData[key]; 
@@ -169,7 +171,7 @@ user.avatar = avatarInput.value.trim();
 user.username = nameInput.value.trim();
 const newPass = passInput.value;
 const msg = settingsMsg;
-msg.style.display='block'; msg.style.color='white'; msg.textContent='';
+msg.style.display='block'; msg.textContent='';
 if(user.username.length<1){ msg.textContent='❌ Nazwa użytkownika nie może być pusta!'; return; }
 if(newPass && newPass.length<6){ msg.textContent='❌ Hasło musi mieć co najmniej 6 znaków!'; return; }
 if(newPass) user.password = newPass;
