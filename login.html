@@ -5,7 +5,7 @@
 <title>Login | Security Flastra</title>
 <link rel="stylesheet" href="style.css">
 <style>
-/* Białe obramowanie dla komunikatów błędów i czarne tło */
+/* Komunikaty błędów: czarne tło + biała obwódka */
 .error-message {
     background-color: black; 
     border: 1px solid white; 
@@ -14,6 +14,16 @@
     font-weight: bold; 
     color: white; 
     border-radius: 4px;
+}
+
+/* Poprawka avatar w profilu */
+.profile-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto 10px;
 }
 </style>
 </head>
@@ -34,7 +44,7 @@
 <!-- PROFIL ZALOGOWANEGO UŻYTKOWNIKA -->
 <div id="profilePanel" class="profile-panel" style="display:none;">
     <div class="profile-card">
-        <div id="profileAvatarContainer">
+        <div id="profileAvatarContainer" style="text-align:center;">
             <div class="profile-avatar" id="profileEmoji">👤</div>
             <img id="profileAvatar" class="profile-img" src="" style="display:none;">
         </div>
@@ -99,98 +109,109 @@ toLogin.onclick = e => { e.preventDefault(); registerDiv.style.display='none'; l
 
 // REJESTRACJA
 registerBtn.onclick = function() {
-const username = regUsername.value.trim(); 
-const email = regEmail.value.trim();
-const pass = regPass.value; 
-const passConf = regPassConf.value; 
-const privacyOk = privacyCheck.checked;
-const errDiv = regError; 
-errDiv.style.display='block'; errDiv.textContent='';
-if(!privacyOk){ errDiv.textContent='❌ Musisz zaakceptować politykę prywatności!'; return;}
-if(pass!==passConf){ errDiv.textContent='❌ Hasła się nie zgadzają!'; return;}
-if(pass.length<6){ errDiv.textContent='❌ Hasło musi mieć co najmniej 6 znaków!'; return;}
-if(userData[email]){ errDiv.textContent='❌ Ten email już istnieje!'; return;}
-userData[email]={username,email,password:pass,avatar:''};
-localStorage.setItem('appUsers',JSON.stringify(userData));
-localStorage.setItem('loggedUser',email);
-regUsername.value=''; regEmail.value=''; regPass.value=''; regPassConf.value=''; privacyCheck.checked=false;
-showProfile(userData[email]);
+    const username = regUsername.value.trim(); 
+    const email = regEmail.value.trim();
+    const pass = regPass.value; 
+    const passConf = regPassConf.value; 
+    const privacyOk = privacyCheck.checked;
+    const errDiv = regError; 
+    errDiv.style.display='block'; errDiv.textContent='';
+    if(!privacyOk){ errDiv.textContent='❌ Musisz zaakceptować politykę prywatności!'; return;}
+    if(pass!==passConf){ errDiv.textContent='❌ Hasła się nie zgadzają!'; return;}
+    if(pass.length<6){ errDiv.textContent='❌ Hasło musi mieć co najmniej 6 znaków!'; return;}
+    if(userData[email]){ errDiv.textContent='❌ Ten email już istnieje!'; return;}
+    userData[email]={username,email,password:pass,avatar:''};
+    localStorage.setItem('appUsers',JSON.stringify(userData));
+    localStorage.setItem('loggedUser',email);
+    regUsername.value=''; regEmail.value=''; regPass.value=''; regPassConf.value=''; privacyCheck.checked=false;
+    showProfile(userData[email]);
 };
 
 // LOGOWANIE
 loginBtn.onclick = function() {
-const input = loginEmail.value.trim(); 
-const pass = loginPass.value; 
-const errDiv = loginError;
-errDiv.style.display='block'; errDiv.textContent='';
-let found=null; 
-for(let key in userData){ 
-    const u = userData[key]; 
-    if((u.email===input||u.username===input)&&u.password===pass){ found=u; break; } 
-}
-if(found){ localStorage.setItem('loggedUser',found.email); showProfile(found); } 
-else { errDiv.textContent='❌ Błędny email/nazwa lub hasło!'; }
+    const input = loginEmail.value.trim(); 
+    const pass = loginPass.value; 
+    const errDiv = loginError;
+    errDiv.style.display='block'; errDiv.textContent='';
+    let found=null; 
+    for(let key in userData){ 
+        const u = userData[key]; 
+        if((u.email===input||u.username===input)&&u.password===pass){ found=u; break; } 
+    }
+    if(found){ localStorage.setItem('loggedUser',found.email); showProfile(found); } 
+    else { errDiv.textContent='❌ Błędny email/nazwa lub hasło!'; }
 };
 
 // WYLOGOWANIE
 logoutBtn.onclick = function() { 
-localStorage.removeItem('loggedUser'); 
-profilePanel.style.display='none'; 
-loginDiv.style.display='block'; 
-registerDiv.style.display='none'; 
-loginEmail.value=''; loginPass.value=''; 
+    localStorage.removeItem('loggedUser'); 
+    profilePanel.style.display='none'; 
+    loginDiv.style.display='block'; 
+    registerDiv.style.display='none'; 
+    loginEmail.value=''; loginPass.value=''; 
 };
 
 // POKAŻ PROFIL
 function showProfile(user){
-loginDiv.style.display='none'; registerDiv.style.display='none'; settingsDiv.style.display='none'; profilePanel.style.display='block';
-profileName.textContent = user.username; profileEmail.textContent = user.email;
-if(user.avatar){ profileAvatar.src=user.avatar; profileAvatar.style.display='block'; profileEmoji.style.display='none'; } 
-else{ profileAvatar.style.display='none'; profileEmoji.style.display='block'; }
+    loginDiv.style.display='none'; 
+    registerDiv.style.display='none'; 
+    settingsDiv.style.display='none'; 
+    profilePanel.style.display='block';
+    profileName.textContent = user.username; 
+    profileEmail.textContent = user.email;
+    if(user.avatar && user.avatar.trim() !== '') {
+        profileAvatar.src = user.avatar;
+        profileAvatar.style.display = 'block';
+        profileEmoji.style.display = 'none';
+    } else {
+        profileAvatar.style.display = 'none';
+        profileEmoji.style.display = 'block';
+    }
 }
 
 // OTWÓRZ USTAWIENIA
 settingsBtn.onclick = function(){
-const logged = localStorage.getItem('loggedUser'); 
-if(!logged||!userData[logged]) return;
-const user = userData[logged];
-profilePanel.style.display='none';
-settingsDiv.style.display='block';
-avatarInput.value = user.avatar || '';
-nameInput.value = user.username;
-passInput.value = '';
-settingsMsg.textContent='';
+    const logged = localStorage.getItem('loggedUser'); 
+    if(!logged||!userData[logged]) return;
+    const user = userData[logged];
+    profilePanel.style.display='none';
+    settingsDiv.style.display='block';
+    avatarInput.value = user.avatar || '';
+    nameInput.value = user.username;
+    passInput.value = '';
+    settingsMsg.textContent='';
 };
 
 // ZAPISZ ZMIANY USTAWIEŃ
 saveSettings.onclick = function(){
-const logged = localStorage.getItem('loggedUser'); 
-if(!logged||!userData[logged]) return;
-const user = userData[logged];
-user.avatar = avatarInput.value.trim();
-user.username = nameInput.value.trim();
-const newPass = passInput.value;
-const msg = settingsMsg;
-msg.style.display='block'; msg.textContent='';
-if(user.username.length<1){ msg.textContent='❌ Nazwa użytkownika nie może być pusta!'; return; }
-if(newPass && newPass.length<6){ msg.textContent='❌ Hasło musi mieć co najmniej 6 znaków!'; return; }
-if(newPass) user.password = newPass;
-userData[logged] = user;
-localStorage.setItem('appUsers', JSON.stringify(userData));
-msg.textContent='✅ Zmiany zapisane!';
+    const logged = localStorage.getItem('loggedUser'); 
+    if(!logged||!userData[logged]) return;
+    const user = userData[logged];
+    user.avatar = avatarInput.value.trim();
+    user.username = nameInput.value.trim();
+    const newPass = passInput.value;
+    const msg = settingsMsg;
+    msg.style.display='block'; msg.textContent='';
+    if(user.username.length<1){ msg.textContent='❌ Nazwa użytkownika nie może być pusta!'; return; }
+    if(newPass && newPass.length<6){ msg.textContent='❌ Hasło musi mieć co najmniej 6 znaków!'; return; }
+    if(newPass) user.password = newPass;
+    userData[logged] = user;
+    localStorage.setItem('appUsers', JSON.stringify(userData));
+    msg.textContent='✅ Zmiany zapisane!';
 };
 
 // POWRÓT DO PROFILU
 backProfile.onclick = function(){
-const logged = localStorage.getItem('loggedUser'); 
-if(logged && userData[logged]) showProfile(userData[logged]);
+    const logged = localStorage.getItem('loggedUser'); 
+    if(logged && userData[logged]) showProfile(userData[logged]);
 };
 
 // SPRAWDŹ ZALOGOWANIE
 window.onload = function(){ 
-const logged = localStorage.getItem('loggedUser'); 
-if(logged && userData[logged]) showProfile(userData[logged]);
+    const logged = localStorage.getItem('loggedUser'); 
+    if(logged && userData[logged]) showProfile(userData[logged]);
 };
 </script>
+
 </body>
 </html>
