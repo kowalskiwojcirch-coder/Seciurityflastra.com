@@ -1,168 +1,155 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <title>Login | Security Flastra</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        .login-container, .profile-card { max-width: 400px; margin: 20px auto; padding: 20px; border-radius: 8px; border: 1px solid #ccc; }
-        input { width: 100%; padding: 8px; margin: 5px 0; }
-        button { padding: 8px 12px; margin-top: 10px; cursor: pointer; }
-        .profile-avatar { font-size: 60px; margin-bottom: 10px; display: block; }
-        .profile-img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; display: block; margin: 0 auto 10px; }
-        .error-message { margin-top: 5px; font-weight: bold; color: white; }
-    </style>
+<meta charset="UTF-8">
+<title>Login | Security Flastra</title>
+<style>
+body { font-family: Arial, sans-serif; background:#f5f5f5; margin:0; padding:0; }
+.navbar { background:#333; color:#fff; padding:10px 20px; display:flex; justify-content:space-between; align-items:center; }
+.navbar a { color:#fff; text-decoration:none; margin-right:15px; }
+.login-container, .profile-card { max-width:400px; margin:20px auto; padding:20px; border-radius:8px; border:1px solid #ccc; background:#fff; }
+input { width:100%; padding:8px; margin:5px 0; }
+button { padding:8px 12px; margin-top:10px; cursor:pointer; }
+.profile-avatar { font-size:60px; margin-bottom:10px; display:block; text-align:center; }
+.profile-img { width:80px; height:80px; border-radius:50%; object-fit:cover; display:block; margin:0 auto 10px; }
+.error-message { margin-top:5px; font-weight:bold; color:white; }
+</style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="logo">Securityflastra.com</div>
-        <ul class="nav-links">
-            <li><a href="index.html">Home Page</a></li>
-            <li><a href="secretary.html">Secretary</a></li>
-            <li><a href="login.html">Login</a></li>
-            <li class="search">🔍</li>
-        </ul>
-    </nav>
 
-    <section class="login-section">
-        <!-- PROFIL -->
-        <div id="profilePanel" class="profile-panel" style="display:none;">
-            <div class="profile-card">
-                <img id="profileAvatar" class="profile-img" src="" alt="Avatar" style="display:none;">
-                <div id="profileEmoji" class="profile-avatar">👤</div>
-                <h2 id="profileName"></h2>
-                <p id="profileEmail"></p>
-                <button id="logoutBtn">Wyloguj się</button>
-            </div>
-        </div>
+<nav class="navbar">
+<div class="logo">Securityflastra.com</div>
+<ul class="nav-links">
+<li><a href="index.html">Home Page</a></li>
+<li><a href="secretary.html">Secretary</a></li>
+<li><a href="login.html">Login</a></li>
+</ul>
+</nav>
 
-        <!-- LOGOWANIE -->
-        <div id="loginDiv" class="login-container">
-            <h1>Logowanie</h1>
-            <input type="text" id="loginEmail" placeholder="Email lub nazwa" required>
-            <input type="password" id="loginPass" placeholder="Hasło" required>
-            <button id="loginBtn">Zaloguj się</button>
-            <p>Nie masz konta? <button id="toRegister" style="background:none;border:none;color:#4da3ff;text-decoration:underline;cursor:pointer;padding:0;">Rejestracja</button></p>
-            <div id="loginError" class="error-message" style="display:none;"></div>
-        </div>
+<section class="login-section">
 
-        <!-- REJESTRACJA -->
-        <div id="registerDiv" class="login-container" style="display:none;">
-            <h1>Rejestracja</h1>
-            <input type="text" id="regUsername" placeholder="Nazwa użytkownika" required>
-            <input type="text" id="regEmail" placeholder="Email" required>
-            <input type="password" id="regPass" placeholder="Hasło" required>
-            <input type="password" id="regPassConf" placeholder="Potwierdź hasło" required>
-            <div class="checkbox-group">
-                <input type="checkbox" id="privacyCheck" required>
-                <label for="privacyCheck">Akceptuję <strong>politykę prywatności</strong> i <strong>pliki cookies</strong></label>
-            </div>
-            <button id="registerBtn">Zarejestruj się</button>
-            <p>Masz już konto? <button id="toLogin" style="background:none;border:none;color:#4da3ff;text-decoration:underline;cursor:pointer;padding:0;">Logowanie</button></p>
-            <div id="regError" class="error-message" style="display:none;"></div>
-        </div>
+<!-- PROFIL -->
+<div id="profilePanel" class="profile-card" style="display:none;">
+<img id="profileAvatar" class="profile-img" src="" alt="Avatar" style="display:none;">
+<div id="profileEmoji" class="profile-avatar">👤</div>
+<h2 id="profileName"></h2>
+<p id="profileEmail"></p>
+<button id="settingsBtn">Ustawienia</button>
+<p style="font-size:12px;color:#888;">Ta funkcja jest w becie 1.2</p>
+<button id="logoutBtn">Wyloguj się</button>
+</div>
 
-        <!-- USTAWIENIA -->
-        <div id="settingsDiv" class="login-container" style="display:none;">
-            <h1>Ustawienia konta (Beta 1.2)</h1>
-            <label>Awatar (URL zdjęcia):</label>
-            <input type="text" id="avatarInput" placeholder="Np. https://example.com/avatar.jpg">
-            <label>Nazwa użytkownika:</label>
-            <input type="text" id="nameInput" placeholder="Nowa nazwa">
-            <label>Hasło:</label>
-            <input type="password" id="passInput" placeholder="Nowe hasło">
-            <button id="saveSettings">Zapisz zmiany</button>
-            <button id="backProfile" style="margin-top:5px;">Powrót do profilu</button>
-            <div id="settingsMsg" class="error-message" style="display:block;"></div>
-        </div>
-    </section>
+<!-- LOGOWANIE -->
+<div id="loginDiv" class="login-container">
+<h1>Logowanie</h1>
+<input type="text" id="loginEmail" placeholder="Email lub nazwa" required>
+<input type="password" id="loginPass" placeholder="Hasło" required>
+<button id="loginBtn">Zaloguj się</button>
+<p>Nie masz konta? <button id="toRegister" style="background:none;border:none;color:#4da3ff;text-decoration:underline;cursor:pointer;padding:0;">Rejestracja</button></p>
+<div id="loginError" class="error-message" style="display:none;"></div>
+</div>
 
-    <footer>
-        <p>&copy; 2024-2026 Security Flastra. Wszystkie prawa zastrzeżone.</p>
-    </footer>
+<!-- REJESTRACJA -->
+<div id="registerDiv" class="login-container" style="display:none;">
+<h1>Rejestracja</h1>
+<input type="text" id="regUsername" placeholder="Nazwa użytkownika" required>
+<input type="text" id="regEmail" placeholder="Email" required>
+<input type="password" id="regPass" placeholder="Hasło" required>
+<input type="password" id="regPassConf" placeholder="Potwierdź hasło" required>
+<div class="checkbox-group">
+<input type="checkbox" id="privacyCheck" required>
+<label for="privacyCheck">Akceptuję <strong>politykę prywatności</strong> i <strong>pliki cookies</strong></label>
+</div>
+<button id="registerBtn">Zarejestruj się</button>
+<p>Masz już konto? <button id="toLogin" style="background:none;border:none;color:#4da3ff;text-decoration:underline;cursor:pointer;padding:0;">Logowanie</button></p>
+<div id="regError" class="error-message" style="display:none;"></div>
+</div>
 
-    <script>
-        let userData = JSON.parse(localStorage.getItem('appUsers')) || {};
+<!-- USTAWIENIA -->
+<div id="settingsDiv" class="login-container" style="display:none;">
+<h1>Ustawienia konta (Beta 1.2)</h1>
+<label>Awatar (URL zdjęcia):</label>
+<input type="text" id="avatarInput" placeholder="Np. https://example.com/avatar.jpg">
+<label>Nazwa użytkownika:</label>
+<input type="text" id="nameInput" placeholder="Nowa nazwa">
+<label>Hasło:</label>
+<input type="password" id="passInput" placeholder="Nowe hasło">
+<button id="saveSettings">Zapisz zmiany</button>
+<button id="backProfile" style="margin-top:5px;">Powrót do profilu</button>
+<div id="settingsMsg" class="error-message" style="display:block;"></div>
+</div>
 
-        // PRZEŁĄCZANIE FORMULARZY
-        document.getElementById('toRegister').onclick = e => { e.preventDefault(); loginDiv.style.display='none'; registerDiv.style.display='block'; };
-        document.getElementById('toLogin').onclick = e => { e.preventDefault(); registerDiv.style.display='none'; loginDiv.style.display='block'; };
+</section>
 
-        // REJESTRACJA
-        registerBtn.onclick = function() {
-            const username = regUsername.value.trim();
-            const email = regEmail.value.trim();
-            const pass = regPass.value;
-            const passConf = regPassConf.value;
-            const privacyOk = privacyCheck.checked;
-            const errDiv = regError;
-            errDiv.style.display='block'; errDiv.style.color='white'; errDiv.textContent='';
+<footer>
+<p>&copy; 2024-2026 Security Flastra. Wszystkie prawa zastrzeżone.</p>
+</footer>
 
-            if(!privacyOk){ errDiv.textContent='❌ Musisz zaakceptować politykę prywatności!'; return;}
-            if(pass!==passConf){ errDiv.textContent='❌ Hasła się nie zgadzają!'; return;}
-            if(pass.length<6){ errDiv.textContent='❌ Hasło musi mieć co najmniej 6 znaków!'; return;}
-            if(userData[email]){ errDiv.textContent='❌ Ten email już istnieje!'; return;}
+<script>
+let userData = JSON.parse(localStorage.getItem('appUsers')) || {};
 
-            userData[email]={username,email,password:pass,avatar:''};
-            localStorage.setItem('appUsers',JSON.stringify(userData));
-            localStorage.setItem('loggedUser',email);
+// PRZEŁĄCZANIE FORMULARZY
+toRegister.onclick = e => { e.preventDefault(); loginDiv.style.display='none'; registerDiv.style.display='block'; };
+toLogin.onclick = e => { e.preventDefault(); registerDiv.style.display='none'; loginDiv.style.display='block'; };
 
-            regUsername.value=''; regEmail.value=''; regPass.value=''; regPassConf.value=''; privacyCheck.checked=false;
-            showProfile(userData[email]);
-        };
+// REJESTRACJA
+registerBtn.onclick = function() {
+const username=regUsername.value.trim(); const email=regEmail.value.trim();
+const pass=regPass.value; const passConf=regPassConf.value; const privacyOk=privacyCheck.checked;
+const errDiv=regError; errDiv.style.display='block'; errDiv.style.color='white'; errDiv.textContent='';
+if(!privacyOk){ errDiv.textContent='❌ Musisz zaakceptować politykę prywatności!'; return;}
+if(pass!==passConf){ errDiv.textContent='❌ Hasła się nie zgadzają!'; return;}
+if(pass.length<6){ errDiv.textContent='❌ Hasło musi mieć co najmniej 6 znaków!'; return;}
+if(userData[email]){ errDiv.textContent='❌ Ten email już istnieje!'; return;}
+userData[email]={username,email,password:pass,avatar:''};
+localStorage.setItem('appUsers',JSON.stringify(userData));
+localStorage.setItem('loggedUser',email);
+regUsername.value=''; regEmail.value=''; regPass.value=''; regPassConf.value=''; privacyCheck.checked=false;
+showProfile(userData[email]);
+};
 
-        // LOGOWANIE
-        loginBtn.onclick = function() {
-            const input = loginEmail.value.trim();
-            const pass = loginPass.value;
-            const errDiv = loginError; errDiv.style.display='block'; errDiv.style.color='white'; errDiv.textContent='';
-            let found=null;
-            for(let key in userData){
-                const u = userData[key];
-                if((u.email===input||u.username===input)&&u.password===pass){ found=u; break; }
-            }
-            if(found){ localStorage.setItem('loggedUser',found.email); showProfile(found); }
-            else{ errDiv.textContent='❌ Błędny email/nazwa lub hasło!'; }
-        };
+// LOGOWANIE
+loginBtn.onclick = function() {
+const input=loginEmail.value.trim(); const pass=loginPass.value; const errDiv=loginError;
+errDiv.style.display='block'; errDiv.style.color='white'; errDiv.textContent='';
+let found=null; for(let key in userData){ const u=userData[key]; if((u.email===input||u.username===input)&&u.password===pass){found=u; break;} }
+if(found){ localStorage.setItem('loggedUser',found.email); showProfile(found); } else { errDiv.textContent='❌ Błędny email/nazwa lub hasło!'; }
+};
 
-        // WYLOGOWANIE
-        logoutBtn.onclick=function(){ localStorage.removeItem('loggedUser'); profilePanel.style.display='none'; loginDiv.style.display='block'; registerDiv.style.display='none'; loginEmail.value=''; loginPass.value=''; };
+// WYLOGOWANIE
+logoutBtn.onclick=function(){ localStorage.removeItem('loggedUser'); profilePanel.style.display='none'; loginDiv.style.display='block'; registerDiv.style.display='none'; loginEmail.value=''; loginPass.value=''; };
 
-        // POKAŻ PROFIL + USTAWIENIA
-        function showProfile(user){
-            loginDiv.style.display='none'; registerDiv.style.display='none'; settingsDiv.style.display='none'; profilePanel.style.display='block';
-            profileName.textContent=user.username; profileEmail.textContent=user.email;
-            if(user.avatar){ profileAvatar.src=user.avatar; profileAvatar.style.display='block'; profileEmoji.style.display='none'; }
-            else{ profileAvatar.style.display='none'; profileEmoji.style.display='block'; }
+// POKAŻ PROFIL
+function showProfile(user){
+loginDiv.style.display='none'; registerDiv.style.display='none'; settingsDiv.style.display='none'; profilePanel.style.display='block';
+profileName.textContent=user.username; profileEmail.textContent=user.email;
+if(user.avatar){ profileAvatar.src=user.avatar; profileAvatar.style.display='block'; profileEmoji.style.display='none'; }
+else{ profileAvatar.style.display='none'; profileEmoji.style.display='block'; }
+}
 
-            if(!document.getElementById('settingsBtn')){
-                const btn = document.createElement('button'); btn.id='settingsBtn'; btn.textContent='Ustawienia';
-                btn.style.marginTop='10px'; btn.style.background='#4da3ff'; btn.style.color='#fff'; btn.style.border='none'; btn.style.padding='5px 10px'; btn.style.cursor='pointer';
-                btn.onclick=function(){ profilePanel.style.display='none'; settingsDiv.style.display='block'; avatarInput.value=user.avatar||''; nameInput.value=user.username; passInput.value=''; settingsMsg.textContent=''; };
-                profileCard.appendChild(btn);
+// USTAWIENIA
+settingsBtn.onclick = function(){
+const logged=localStorage.getItem('loggedUser'); if(!logged||!userData[logged]) return;
+const user=userData[logged]; profilePanel.style.display='none'; settingsDiv.style.display='block';
+avatarInput.value=user.avatar||''; nameInput.value=user.username; passInput.value=''; settingsMsg.textContent='';
+};
 
-                const beta=document.createElement('p'); beta.textContent='Ta funkcja jest w becie 1.2'; beta.style.fontSize='12px'; beta.style.color='#888'; beta.style.marginTop='5px';
-                profileCard.appendChild(beta);
-            }
-        }
+saveSettings.onclick=function(){
+const logged=localStorage.getItem('loggedUser'); if(!logged||!userData[logged]) return;
+const user=userData[logged]; user.avatar=avatarInput.value.trim(); user.username=nameInput.value.trim();
+const passVal=passInput.value; const msg=settingsMsg; msg.style.display='block'; msg.style.color='white'; msg.textContent='';
+if(user.username.length<1){ msg.textContent='❌ Nazwa użytkownika nie może być pusta!'; return; }
+if(passVal && passVal.length<6){ msg.textContent='❌ Hasło musi mieć co najmniej 6 znaków!'; return; }
+if(passVal) user.password=passVal;
+userData[logged]=user; localStorage.setItem('appUsers',JSON.stringify(userData));
+msg.textContent='✅ Zmiany zapisane!';
+};
 
-        // ZAPISZ ZMIANY USTAWIEŃ
-        saveSettings.onclick=function(){
-            const logged=localStorage.getItem('loggedUser'); if(!logged||!userData[logged]) return;
-            const user=userData[logged]; user.avatar=avatarInput.value.trim(); user.username=nameInput.value.trim();
-            const passVal=passInput.value; const msg=settingsMsg; msg.style.display='block'; msg.style.color='white'; msg.textContent='';
-            if(user.username.length<1){ msg.textContent='❌ Nazwa użytkownika nie może być pusta!'; return; }
-            if(passVal && passVal.length<6){ msg.textContent='❌ Hasło musi mieć co najmniej 6 znaków!'; return; }
-            if(passVal) user.password=passVal;
-            userData[logged]=user; localStorage.setItem('appUsers',JSON.stringify(userData));
-            msg.textContent='✅ Zmiany zapisane!';
-        };
+backProfile.onclick=function(){ const logged=localStorage.getItem('loggedUser'); if(logged&&userData[logged]) showProfile(userData[logged]); };
 
-        // POWRÓT DO PROFILU
-        backProfile.onclick=function(){ const logged=localStorage.getItem('loggedUser'); if(logged&&userData[logged]) showProfile(userData[logged]); };
+// SPRAWDŹ ZALOGOWANIE
+window.onload=function(){ const logged=localStorage.getItem('loggedUser'); if(logged&&userData[logged]) showProfile(userData[logged]); };
+</script>
 
-        // SPRAWDŹ ZALOGOWANIE
-        window.onload=function(){ const logged=localStorage.getItem('loggedUser'); if(logged&&userData[logged]) showProfile(userData[logged]); };
-    </script>
 </body>
 </html>
